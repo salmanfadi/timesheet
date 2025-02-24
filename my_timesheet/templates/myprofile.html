@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/myprofile.css">
+</head>
+<body>
+    <header>
+        <a href="../templates/userdash.html">
+            <img src="../static/images/logo.png" alt="Logo">
+        </a>
+        
+        <h1>My Profile</h1>
+        <div id="info">
+            <div id="date"></div>
+            <div id="day"></div>
+            <div id="weather">Weather: Loading...</div>
+        </div>
+    </header>
+    <div id="sidebar">
+        <a href="{{ url_for('my_profile') }}" id="profile-btn"><i class="fas fa-address-card"></i> My Profile</a>
+        <a href="{{ url_for('my_timesheet') }}" id="timesheet-btn"><i class="fas fa-clock"></i> My Timesheet</a>
+            <a href="https://outlook.office365.com/mail/" class="sidebar-link">
+              <i class="fa fa-envelope"></i> Outlook Web
+            </a>
+            <a href="https://teams.microsoft.com/v2/" class="sidebar-link">
+              <i class="fa fa-users"></i> Teams Web
+            </a>
+            <a href="{{ url_for('kanban') }}" class="track-progress"><i class="fas fa-clipboard-check"></i> Track Your Progress</a>
+            <br><br><br><br>
+            <a href="{{ url_for('logout') }}t" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+
+
+    </div>
+    <div id="main-content">
+        <div class="profile-container"><i class="fas fa-address-card"></i>
+            <h2>Profile Information</h2>
+            <p id="profile-name"></p>
+            <p id="profile-id"></p>
+            <p id="profile-role"></p>
+            <p id="profile-department" ></p>
+            <p id="profile-email"></p>
+            <p id="profile-project"></p>
+            <p id="profile-client-company"></p>
+            <p id="profile-manager"></p>
+            <p id="profile-manager-email"></p>
+        </div>
+    </div>
+
+    <div id="email-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Send Email</h2>
+            <form id="email-form">
+                <label for="email-to">To:</label>
+                <input type="email" id="email-to" name="email-to" required>
+                
+                <label for="email-subject">Subject:</label>
+                <input type="text" id="email-subject" name="email-subject" required>
+                
+                <label for="email-message">Message:</label>
+                <textarea id="email-message" name="email-message" rows="5" required></textarea>
+                
+                <label for="email-attachments">Attachments:</label>
+                <input type="file" id="email-attachments" name="email-attachments" multiple>
+                
+                <button type="submit">Send</button>
+            </form>
+        </div>
+    </div>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="../static/js/myprofile.js"></script>
+    
+</body>
+</html>

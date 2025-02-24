@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Success</title>
+    
+    <!-- Include Manrope font -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&display=swap">
+
+    <!-- Custom Styles -->
+    <style>
+        /* General styling for the page */
+        body {
+            font-family: 'Manrope', sans-serif; /* Set the font to Manrope */
+            background-color: #f0f0f0; /* Neutral background */
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Styling for the header */
+        .header {
+            background-color: #228B22; /* Leafy green color */
+            text-align: center;
+            padding: 15px; /* Sufficient padding for the header */
+        }
+
+        .logo-header {
+            height: 60px; /* Adjust as needed for the logo size */
+        }
+
+        /* Styling for the timesheet container */
+        .timesheet-container {
+            width: 80%; /* Wider to accommodate the table */
+            margin: 50px auto; /* Centered */
+            padding: 20px; /* Padding for the timesheet */
+            background-color: white;
+            border: 1px solid #ddd; /* Border for the container */
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2); /* Subtle shadow */
+        }
+
+        /* Styling for headings */
+        h1 {
+            text-align: center;
+            color: #333; /* Darker shade for text */
+        }
+
+        /* Styling for the success message */
+        .success-message {
+            margin-bottom: 20px; /* Spacing below the success message */
+            font-weight: 600; /* Slightly bold font */
+            text-align: center; /* Centered text */
+        }
+
+        /* Styling for the download link */
+        .download-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: 600;
+            color: #228B22;
+            text-decoration: none;
+        }
+
+        .download-link:hover {
+            text-decoration: underline;
+        }
+
+        /* Styling for buttons */
+        .logout-button {
+            background-color: #228B22;
+            color: #ffffff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px; /* Increase padding to make it bigger */
+            font-size: 16px; /* Increase font size */
+            cursor: pointer;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+
+        .logout-button:hover {
+            background-color: #1e7c1e; /* Darken the color on hover */
+        }
+    </style>
+</head>
+<body>
+    <!-- Header section -->
+    <div class="header">
+        <h1>Timesheet Submission Success</h1>
+    </div>
+
+    <!-- Timesheet container -->
+    <div class="timesheet-container">
+        <p class="success-message">Your timesheet has been successfully created and is ready for download.</p>
+        <a href="{{ url_for('download_timesheet') }}" class="download-link">Download Timesheet</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,93 @@
+/* CSS styles for the admin login page with enhanced aesthetics */
+body {
+    font-family: 'Manrope', sans-serif; /* Using Manrope font */
+    margin: 0;
+    padding: 0;
+    background-color: #f2f2f2; /* Light grey background */
+}
+
+.login-header {
+    background-color: #4caf50; /* Green leafy color */
+    color: white;
+    text-align: center;
+    padding: 25px; /* More padding for spaciousness */
+    border-bottom: 2px solid #3e8e41; /* Adds a subtle border for distinction */
+}
+
+.kudzu-logo {
+    height: 100px; /* Slightly smaller logo */
+    border-radius: 50%; /* Round shape */
+}
+.admin-login-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+.login-container {
+    max-width: 400px;
+    margin: 80px auto; /* Increased top margin */
+    padding: 30px; /* Additional padding for spaciousness */
+    background-color: white;
+    border-radius: 15px; /* Rounded corners */
+    box-shadow: 0 10px 20px 0 rgba(0, 0, 0, 0.15); /* Soft shadow for depth */
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group {
+    margin-bottom: 20px; /* Increased spacing between form elements */
+}
+
+label {
+    font-weight: 600; /* Bold label text */
+}
+
+input {
+    padding: 12px; /* Slightly increased padding */
+    border: 1px solid #ddd;
+    border-radius: 10px; /* Rounded corners */
+    width: 100%;
+}
+
+button {
+    background-color: #4caf50; /* Green button */
+    color: white;
+    padding: 15px; /* Larger button */
+    border: none;
+    border-radius: 10px; /* Rounded corners */
+    cursor: pointer;
+    transition: background-color 0.3s; /* Smooth hover transition */
+}
+
+button:hover {
+    background-color: #3e8e41; /* Darker green on hover */
+}
+
+.forgot-password {
+    text-align: center; /* Centered text */
+    font-size: 14px; /* Smaller font for auxiliary text */
+}
+
+.forgot-password a {
+    color: #4caf50; /* Matching the primary color */
+    text-decoration: none; /* No underline */
+    transition: color 0.3s; /* Smooth transition for hover effect */
+}
+
+.forgot-password a:hover {
+    color: #3e8e41; /* Darker green on hover */
+}

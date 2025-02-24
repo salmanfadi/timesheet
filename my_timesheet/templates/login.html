@@ -1,0 +1,279 @@
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Kudzu Login</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <!-- Font Awesome for icons -->
+    <style>
+      body {
+          font-family: Manrope, Arial, sans-serif;
+          background-color: #f0f0f0;
+          margin: 0;
+          padding: 0;
+      }
+
+      .header {
+          background-color: #228B22;
+          text-align: center;
+          padding: 15px;
+      }
+
+      .logo-header {
+          height: 60px;
+          max-width: 100%;
+      }
+
+      .date-time {
+          float: right;
+          margin-top: 10px;
+          margin-right: 20px;
+          color: #000000;
+          font-size: 14px;
+      }
+
+      .container {
+          width: 90%;
+          max-width: 400px;
+          margin: 30px auto;
+          text-align: center;
+          background-color: white;
+          padding: 20px;
+          border: 1px solid #ddd;
+          box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+          opacity: 0;
+          animation: fadeIn 1.5s ease forwards;
+      }
+
+      @keyframes fadeIn {
+          from {
+              opacity: 0;
+          }
+
+          to {
+              opacity: 1;
+          }
+      }
+
+      input {
+          width: 100%;
+          padding: 10px;
+          margin: 5px 0;
+          border: 1px solid #ddd;
+          border-radius: 5px;
+          box-sizing: border-box;
+      }
+
+      input[type="submit"] {
+          background-color: #228B22; /* Green color */
+          color: white;
+          border: none;
+          cursor: pointer;
+          padding: 10px 20px;
+          font-size: 16px;
+          border-radius: 25px;
+          text-transform: uppercase;
+          letter-spacing: 1px;
+          font-weight: bold;
+          transition: background-color 0.3s ease;
+      }
+
+      input[type="submit"]:hover {
+          background-color: #006400; /* Darker green color on hover */
+      }
+
+      .error {
+          color: red;
+          margin-bottom: 10px;
+      }
+
+      .icon {
+          margin-right: 5px;
+      }
+
+      .footer {
+          background-color: #228B22;
+          color: #f0f0f0;
+          text-align: center;
+          padding: 10px 0;
+          position: fixed;
+          bottom: 0;
+          left: 0;
+          width: 100%;
+      }
+
+      .footer a {
+          color: #f0f0f0;
+          text-decoration: none;
+          margin: 0 10px;
+      }
+
+      .toggle-password {
+          position: absolute;
+          top: 50%;
+          right: 10px;
+          transform: translateY(-50%);
+          cursor: pointer;
+      }
+
+      #greeting-page {
+          background-color: #f0f0f0; /* Green color */
+          color: #000000;
+          padding: 40px;
+          font-size: 3em;
+          text-shadow: 2px 2px 4px #000000;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+          border-radius: 25px;
+          opacity: 0;
+          animation: fadeIn 1.5s ease forwards;
+      }
+
+      #enter-btn {
+          padding: 10px 20px;
+          color: black;
+          border: none;
+          cursor: pointer;
+          border-radius: 50%;
+          background-color: #f0f0f0;
+          margin-top: 20px;
+      }
+
+      #enter-btn:hover {
+          background-color: #dcdcdc;
+      }
+
+      .enter-btn-icon {
+          margin-left: 5px;
+      }
+
+      @media only screen and (max-width: 600px) {
+          .header {
+              padding: 10px;
+          }
+
+          .logo-header {
+              height: 60px;
+          }
+
+          .date-time {
+              margin-top: 5px;
+              font-size: 12px;
+          }
+
+          .container {
+              padding: 10px;
+          }
+
+          input {
+              padding: 8px;
+          }
+
+          input[type="submit"] {
+              padding: 8px 16px;
+          }
+      }
+  </style>
+</head>
+
+<body>
+    <header class="header">
+        <img src="../static/images/kudzu.jpeg" alt="Kudzu Logo" class="logo-header">
+    </header>
+    <div id="greeting-page" style="text-align: center;">
+        <h1 style="font-size: 3em;">Hello!</h1>
+        <div style="margin-top: 20px;">
+            <button onclick="showLoginForm()" style="padding: 10px 20px; color: black; border: none; cursor: pointer;">
+                Enter
+                <i class="fas fa-arrow-right" style="margin-left: 5px;"></i>
+            </button>
+        </div>
+    </div>
+    <div class="date-time" id="date-time"></div>
+    <div class="container" style="display: none;">
+        <h1>Login</h1>
+        <form action="{{ url_for('auth.login') }}" method="post" id="login-form">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" placeholder="Enter your email" required><br>
+            <label for="password">Password:</label>
+            <div style="position:relative;">
+                <input type="password" id="password" name="password" placeholder="Enter your password" required>
+                <span class="toggle-password" onclick="togglePasswordVisibility()"><i class="fas fa-eye"></i></span>
+              </div><br>
+            <br>
+            <div class="error" id="error-message"></div>
+            <input type="submit" value="Login">
+        </form>
+    </div>
+    <footer class="footer">
+        <a href="msteams://" title="Open Microsoft Teams">
+            <i class="fab fa-microsoft"></i> Teams
+        </a>
+        <a href="outlook://" title="Open Outlook">
+            <i class="far fa-envelope"></i> Outlook
+        </a>
+    </footer>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var container = document.querySelector('.container');
+            container.style.opacity = '1';
+
+            var dateTimeElement = document.getElementById('date-time');
+            var now = new Date();
+            var hours = now.getHours();
+            var ampm = hours >= 12 ? 'PM' : 'AM';
+            hours = hours % 12;
+            hours = hours ? hours : 12;
+            var minutes = now.getMinutes();
+            var dateTimeString = now.toLocaleDateString() + ' ' + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ' ' + ampm;
+            dateTimeElement.innerHTML = '<i class="far fa-clock icon"></i>' + dateTimeString;
+        });
+
+        function showLoginForm() {
+            var greetingPage = document.getElementById('greeting-page');
+            greetingPage.style.display = 'none';
+            var container = document.querySelector('.container');
+            container.style.display = 'block';
+        }
+        document.addEventListener('DOMContentLoaded', function () {
+          var container = document.querySelector('.container');
+          container.style.opacity = '1';
+
+          var dateTimeElement = document.getElementById('date-time');
+          var now = new Date();
+          var hours = now.getHours();
+          var ampm = hours >= 12 ? 'PM' : 'AM';
+          hours = hours % 12;
+          hours = hours ? hours : 12;
+          var minutes = now.getMinutes();
+          var dateTimeString = now.toLocaleDateString() + ' ' + hours + ':' + (minutes < 10 ? '0' : '') + minutes + ' ' + ampm;
+          dateTimeElement.innerHTML = '<i class="far fa-clock icon"></i>' + dateTimeString;
+      });
+
+      function showLoginForm() {
+          var greetingPage = document.getElementById('greeting-page');
+          greetingPage.style.display = 'none';
+          var container = document.querySelector('.container');
+          container.style.display = 'block';
+      }
+
+      function togglePasswordVisibility() {
+          var passwordInput = document.getElementById('password');
+          var icon = document.querySelector('.toggle-password i');
+
+          if (passwordInput.type === 'password') {
+              passwordInput.type = 'text';
+              icon.classList.remove('fa-eye-slash');
+              icon.classList.add('fa-eye');
+          } else {
+              passwordInput.type = 'password';
+              icon.classList.remove('fa-eye');
+              icon.classList.add('fa-eye-slash');
+          }
+      }
+
+    </script>
+</body>
+
+</html>

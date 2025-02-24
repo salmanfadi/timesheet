@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Kudzu Timesheet</title>
+    <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600&display=swap"> <!-- Manrope font -->
+    <link rel="stylesheet" type="text/css" href="../static/css/timesheet.css">
+    <script src="../static/js/timesheet.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.4/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+</head>
+<body>
+    <!-- Header Section with Leafy Green Background -->
+    <header class="header">
+        <img src="../static/images/kudzu.jpeg" alt="Kudzu Logo" class="logo-header">
+        <div class="navbar">
+            <button class="logout-button" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <div class="timesheet-container">
+        <h2>Timesheet for {{ current_month }}</h2>
+
+        <!-- Display exact local date and time -->
+        <p>Date and Time: <span id="local-date-time"></span></p>
+
+        <!-- Additional Information -->
+        <div class="employee-info">
+            <p>Employee Code: {{ employee.Employee_ID }}</p>
+            <p>Employee Name: {{ employee.Candidate_Name }}</p>
+            <p>Role: {{ employee.Candidate_Designation }}</p>
+            <p>Department: {{ employee.Client }}</p>
+        </div>
+
+        <!-- Project Input Field -->
+        <form id="timesheet-form" action="/create_and_insert_data" method="post">
+            <label for="project">Enter Project for this Month:</label>
+            <input type="text" id="project" name="project" required placeholder="Project Name">
+
+            <label for="month">Current Month:</label>
+            <input type="month" id="month_year" name="month_year" required onchange="generateTimesheet()">
+
+            <br>
+            <!-- Employee Details -->
+            <input type="hidden" id="employee_id" name="employee_id" value="{{ employee.Employee_ID }}">
+            <input type="hidden" id="candidate_name" name="candidate_name" value="{{ employee.Candidate_Name }}">
+            <input type="hidden" id="candidate_designation" name="candidate_designation" value="{{ employee.Candidate_Designation }}">
+            <input type="hidden" id="department" name="department" value="{{ employee.Client }}">
+            <br>
+            <!-- Table for daily log-in and log-out times -->
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Day</th>
+                        <th>Log-In Time</th>
+                        <th>Log-Out Time</th>
+                        <th>Work Hours</th> <!-- Moved here -->
+                        <th>Shift Details</th>
+                        <th>Remarks</th>
+                        <th>Leave</th>
+                        <th>Workday</th>
+                    </tr>
+                </thead>
+                <tbody id="timesheet-body">
+                    <!-- Rows for each date in the month will be generated dynamically -->
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4"><strong>Total Work Hours:</strong></td>
+                        <td id="total-work-hours">0h 0m</td>
+                        <td colspan="4"></td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <!-- Submit and Download buttons -->
+            <div class="button-container">
+                <input type="submit" value="Submit Timesheet" class="submit-btn" />
+            </div>
+        </form>
+    </div>
+</body>
+</html>

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Employee Detail View</title>
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='../static/css/personalfile.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Manrope', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #4CAF50; /* Green color */
+            padding: 20px;
+            text-align: center;
+        }
+        .header-container {
+            display: flex;
+            align-items: center;
+        }
+        .logo img {
+            max-width: 100px;
+        }
+        h1 {
+            margin: 0;
+            padding: 0;
+        }
+        .employee-detail {
+            margin: 20px auto;
+            max-width: 800px;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+        }
+        .employee-info p {
+            margin: 5px 0;
+        }
+        .timesheet-preview {
+            margin-top: 20px;
+        }
+        .timesheet-preview h2 {
+            margin-top: 0;
+        }
+        .excel-thumbnail img {
+            max-width: 100%;
+        }
+        .download-btn {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        .download-btn:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 8px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Enable scrolling if needed */
+            background-color: rgba(0, 0, 0, 0.4); /* Black w/ opacity */
+        }
+
+        /* Modal content */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 80%; /* Could be more or less, depending on screen size */
+            max-width: 600px; /* Max width */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+            position: relative;
+        }
+
+        /* Close button */
+        .close {
+            position: absolute;
+            right: 10px;
+            top: 5px;
+            color: #aaa;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+        }
+
+        /* Form fields */
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        input[type="text"],
+        textarea {
+            width: calc(100% - 40px); /* Adjust width as needed */
+            padding: 8px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        input[type="file"] {
+            margin-top: 5px;
+        }
+
+        /* Button */
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        
+        }
+        .icon-button {
+            cursor: pointer;
+            font-size: 20px; /* Increase the icon size */
+            margin: 10px 20px; /* Add more margin for spacing */
+        }
+    
+        .icon-button.green {
+            color: green; /* Set color to green */
+        }
+    
+        .icon-button.red {
+            color: red; /* Set color to red */
+        }
+
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.3/xlsx.full.min.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="{{ url_for('static', filename='../static/images/kudzu.jpeg') }}" alt="Kudzu Logo">
+            </div>
+            <h1>Employee Detail View</h1>
+        </div>
+    </header>
+    
+    <div class="employee-detail">
+        <div class="employee-info">
+            <p><strong>Employee Code:</strong> {{ employee.Employee_ID }}</p>
+            <p>
+                <strong>Employee Name:</strong> {{ employee.Candidate_Name }}
+            </p>
+            <!-- Make the Kudzu email ID clickable -->
+            <p><strong>Email:</strong> <a href="#" onclick="openEmailForm('{{ employee.KUDZU_Email_Id }}')">{{employee.KUDZU_Email_Id}}</a></p>
+            <p><strong>Role:</strong>{{ employee.Candidate_Designation }} </p>
+            <p><strong>Project:</strong> {{ employee.Project_Name }}</p>
+            <p><strong>Client Company:</strong> {{ employee.Client }}</p>
+            <p><strong>Timesheet Approval Status:</strong> {{ employee.Candidate_Status }}</p>
+            <p><strong>Total Holidays:</strong> <span id="total-holidays">Calculating...</span>
+                <button onclick="viewLeaveCalendar()">View</button>
+            </p>
+            <p><span id="previous-month-status">{{ previousMonthStatus }}</span></p>
+
+        </div>
+        <div class="filter-section">
+            <label for="month">Select Month:</label>
+            <select id="month">
+                {% for month_num, month_name in [(1, 'January'), (2, 'February'), (3, 'March'), (4, 'April'), (5, 'May'), (6, 'June'), (7, 'July'), (8, 'August'), (9, 'September'), (10, 'October'), (11, 'November'), (12, 'December')] %}
+                <option value="{{ month_num }}" {% if month_num == current_month %} selected {% endif %}>{{ month_name }}</option>
+            {% endfor %}
+            </select>
+            
+            <label for="year">Select Year:</label>
+            <select id="year">
+                <!-- Dynamically generate options for 100 years from now -->
+                {% for year in range(current_year, current_year + 100) %}
+                    <option value="{{ year }}">{{ year }}</option>
+                {% endfor %}
+            </select>
+            <button onclick="filterTimesheet()">Filter</button>
+        </div>
+    
+        
+        <div class="timesheet-preview">
+
+
+            <h2>Timesheet Preview </h2>
+
+            <h2>Timesheet Preview for <span id="selected-month">{{ month_name }}</span> {{ current_year }}</h2>
+            <!-- Display timesheet data -->
+            <div id="timesheet-data">
+                {% if timesheet_available %}
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Day</th>
+                            <th>Login Time</th>
+                            <th>Logout Time</th>
+                            <th>Shift Details</th>
+                            <th>Remarks</th>
+                            <th> Leave </th>
+                            <th> Workday </th>
+                            <!-- Add more headers as needed -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for entry in timesheet_data %}
+                        <tr>
+                            <td>{{ entry.date }}</td>
+                            <td>{{ entry.day }}</td>
+                            <td>{{ entry.login_time.split(' ')[1] if entry.login_time else 'N/A' }}</td>
+                            <td>{{ entry.logout_time.split(' ')[1] if entry.logout_time else 'N/A' }}</td>
+                            <td>{{ entry.shift_details }}</td>
+                            <td>{{ entry.remarks }}</td>
+                            <td>{{ 'Yes' if entry.leave else 'No' }}</td>
+                            <td>{{ 'Yes' if entry.workday else 'No' }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div>
+                <style>
+                    .icon-button {
+                        cursor: pointer;
+                        font-size: 20px; /* Increase the icon size */
+                        margin: 10px 20px; /* Add more margin for spacing */
+                    }
+                
+                    .icon-button.green {
+                        color: green; /* Set color to green */
+                    }
+                
+                    .icon-button.red {
+                        color: red; /* Set color to red */
+                    }
+                </style>
+                
+                <span class="icon-button green" onclick="showApprovalMessage('{{ employee.Employee_ID }}')"><i class="fas fa-check"></i> Approve</span>
+
+                <span class="icon-button red" onclick="openEmailForm()"><i class="fas fa-times"></i> Decline</span>
+                <!-- Add this line for the approval message -->
+                <span id="approval-message" style="display:none; color: green; font-weight: bold; margin-left: 10px;">Timesheet approved</span>
+            </div>
+            </div>
+                {% else %}
+                <p>No timesheet available for selected month and year.</p>
+                {% endif %}
+            </div>
+            <button onclick="downloadTimesheet()">Download Timesheet</button>
+        </div>
+        
+        <!-- Email form modal -->
+        <div id="email-form-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeEmailForm()">&times;</span>
+                <h2>Send Email</h2>
+                <form id="email-form">
+                    <label for="email-to">To:</label>
+                    <input type="text" id="email-to" name="email-to" readonly>
+                    <label for="email-from">From:</label>
+                    <input type="text" id="email-from" name="email-from" value="{{ session['email'] }}" readonly>
+                    <label for="email-subject">Subject:</label>
+                    <input type="text" id="email-subject" name="email-subject" value="Timesheet Declined" readonly>
+                    <label for="email-message">Message:</label>
+                    <textarea id="email-message" name="email-message">Hey {{ employee.Candidate_Name }},</textarea>
+                    <label for="email-attachment">Attachment:</label>
+                    <input type="file" id="email-attachment" name="email-attachment">
+                    <button type="button" onclick="sendEmail()">Send Email</button>
+                </form>
+            </div>
+        </div>
+        
+        
+        <script>
+            function showApprovalMessage(employeeID) {
+                if (!employeeID) {
+                    console.error('Employee ID is undefined.');
+                    return;
+                }
+            
+                // Get the previous month and year
+                const now = new Date();
+                let previousMonth = now.getMonth();
+                let previousYear = now.getFullYear();
+                if (previousMonth === 0) { // January
+                    previousMonth = 12;
+                    previousYear -= 1;
+                }
+            
+                // Construct the body using URLSearchParams
+                const params = new URLSearchParams({
+                    employee_id: employeeID,
+                    previous_month: previousMonth,
+                    previous_year: previousYear
+                });
+            
+                // Send a POST request to the server to approve the timesheet
+                fetch('/approve_timesheet', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded',
+                    },
+                    body: params.toString()
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        return response.json().then(err => {throw new Error(err.error);});
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.message) {
+                        // Show the approval message
+                        alert("Timesheet approved");
+            
+                        // Display the approval message
+                        var approvalMessageElement = document.getElementById('approval-message');
+                        if (approvalMessageElement) {
+                            approvalMessageElement.style.display = 'inline';
+                        } else {
+                            console.error('Approval message element not found.');
+                        }
+                    }
+                })
+                .catch(error => {
+                    console.error('Error approving timesheet:', error);
+                });
+            }
+            </script>
+            
+            
+            
+            
+        
+        
+        
+    </div>
+
+    <!-- Container to display the timesheet data -->
+    <div id="timesheet-preview-container"></div>
+
+    <!-- Email form modal -->
+    <div id="email-form-modal" class="modal" style="display: none;">
+        <div class="modal-content">
+            <span class="close" onclick="closeEmailForm()">&times;</span>
+            <h2>Send Email</h2>
+            <form id="email-form">
+                <label for="email-to">To:</label>
+                <input type="text" id="email-to" name="email-to" readonly>
+                <label for="email-from">From:</label>
+                <input type="text" id="email-from" name="email-from" value="{{ session['email'] }}" readonly>
+                <label for="email-subject">Subject:</label>
+                <input type="text" id="email-subject" name="email-subject">
+                <label for="email-message">Message:</label>
+                <textarea id="email-message" name="email-message">Hey {{ employee.Candidate_Name }},</textarea>
+                <label for="email-attachment">Attachment:</label>
+                <input type="file" id="email-attachment" name="email-attachment">
+                <button type="button" onclick="sendEmail()">Send Email</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function openEmailForm(email) {
+            const emailFormModal = document.getElementById("email-form-modal");
+            // Populate email field with the clicked email
+            document.getElementById("email-to").value = email;
+            // Show the email form modal
+            emailFormModal.style.display = "block";
+        }
+
+        function closeEmailForm() {
+            const emailFormModal = document.getElementById("email-form-modal");
+            // Hide the email form modal
+            emailFormModal.style.display = "none";
+        }
+
+        function sendEmail() {
+            // Implement logic to send email
+            // You can gather form data here and send it using AJAX or any other method
+            // After sending the email, you may want to close the modal
+            closeEmailForm();
+        }
+        function downloadTimesheet() {
+            console.log("Download button clicked.");
+
+            // Get the employee details
+            const employeeCode = "{{ employee.Employee_ID }}";
+            const employeeName = "{{ employee.Candidate_Name }}";
+            const email = "{{ employee.KUDZU_Email_Id }}";
+            const role = "{{ employee.Candidate_Designation }}";
+            const project = "{{ employee.Project_Name }}";
+            const clientCompany = "{{ employee.Client }}";
+            const timesheetApprovalStatus = "{{ employee.Candidate_Status }}";
+
+            // Create a new Workbook
+            const wb = XLSX.utils.book_new();
+
+            // Create a combined worksheet for employee details and timesheet data
+            const combinedSheet = [
+                ["Employee Code:", employeeCode],
+                ["Employee Name:", employeeName],
+                ["Email:", email],
+                ["Role:", role],
+                ["Project:", project],
+                ["Client Company:", clientCompany],
+                ["Timesheet Approval Status:", timesheetApprovalStatus],
+                [], // Add an empty row for separation
+                ["Date", "Day", "Login Time", "Logout Time", "Shift Details", "Remarks", "Leave", "Workday"]
+            ];
+
+            // Get the table element and extract timesheet data
+            const table = document.getElementById("timesheet-data");
+            const rows = table.getElementsByTagName("tr");
+
+            // Loop through rows and extract timesheet data
+            for (let i = 1; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName("td");
+                const rowData = [];
+                for (let j = 0; j < cells.length; j++) {
+                    rowData.push(cells[j].textContent);
+                }
+                combinedSheet.push(rowData);
+            }
+
+            // Add the combined sheet to the workbook
+            const ws = XLSX.utils.aoa_to_sheet(combinedSheet);
+            XLSX.utils.book_append_sheet(wb, ws, "{{ employee.Employee_ID }}_{{ current_month }}_{{ current_year }}");
+
+            // Convert the workbook to a binary string
+            const wbout = XLSX.write(wb, { bookType: 'xlsx', type: 'binary' });
+
+            // Convert the binary string to a Blob
+            const blob = new Blob([s2ab(wbout)], { type: 'application/octet-stream' });
+
+            // Trigger a download
+            saveAs(blob, '{{ employee.Employee_ID }}_{{ current_month }}_{{ current_year }}_timesheet.xlsx');
+
+            console.log("Download complete.");
+        }
+
+
+
+        // Function to convert binary string to ArrayBuffer
+        function s2ab(s) {
+            const buf = new ArrayBuffer(s.length);
+            const view = new Uint8Array(buf);
+            for (let i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        }
+
+        // Function to format date
+        function formatDate(date) {
+            const options = { year: 'numeric', month: '2-digit', day: '2-digit' };
+            return date.toLocaleDateString('en-US', options);
+        }
+        // Function to handle filtering when month or year selection changes
+        // Function to handle filtering when month or year selection changes
+        function filterTimesheet() {
+            // Get selected month and year
+            const selectedMonth = document.getElementById("month").value;
+            const selectedYear = document.getElementById("year").value;
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                            "July", "August", "September", "October", "November", "December"];
+            const monthName = monthNames[selectedMonth - 1];
+
+            // Update the displayed month
+            document.getElementById("selected-month").textContent = monthName;
+
+            // Redirect to the route with the selected month and year
+            window.location.href = "/personal-tile/{{ employee.Employee_ID }}?month=" + selectedMonth + "&year=" + selectedYear;
+        }
+        // Trigger filterTimesheet function when month or year selection changes
+        document.getElementById("month").addEventListener("change", function() {
+            filterTimesheet();
+            updateMonthYear(); // Call the function to update the displayed month and year
+        });
+        document.getElementById("year").addEventListener("change", function() {
+            filterTimesheet();
+            updateMonthYear(); // Call the function to update the displayed month and year
+        });
+
+        // Trigger filterTimesheet function when month or year selection changes
+        function calculateTotalHolidays() {
+            const table = document.getElementById("timesheet-data");
+            const rows = table.getElementsByTagName("tr");
+            let totalHolidays = 0;
+
+            for (let i = 1; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName("td");
+                const leaveCell = cells[6]; // Assuming leave information is in the 7th column
+
+                if (leaveCell.textContent.trim().toLowerCase() === 'yes') {
+                    totalHolidays++;
+                }
+            }
+
+            return totalHolidays;
+        }
+        function updateTotalHolidays() {
+            const totalHolidaysElement = document.getElementById("total-holidays");
+            const totalHolidays = calculateTotalHolidays();
+            totalHolidaysElement.textContent = totalHolidays;
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            updateTotalHolidays();
+            updateMonthYear();
+        });
+        function updateMonthYear() {
+            const selectedMonth = document.getElementById("month").value;
+            const selectedYear = document.getElementById("year").value;
+            const monthNames = ["January", "February", "March", "April", "May", "June",
+                            "July", "August", "September", "October", "November", "December"];
+            const monthName = monthNames[selectedMonth - 1];
+            document.getElementById("selected-month").textContent = monthName;
+            document.getElementById("selected-year").textContent = selectedYear;
+        }
+        function viewLeaveCalendar() {
+            // Get the table element containing timesheet data
+            const table = document.getElementById("timesheet-data");
+            const rows = table.getElementsByTagName("tr");
+            const leaveDates = [];
+
+            // Collect leave dates from the timesheet data
+            for (let i = 1; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName("td");
+                const leaveCell = cells[6]; // Assuming leave information is in the 7th column
+
+                if (leaveCell.textContent.trim().toLowerCase() === 'yes') {
+                    const dateCell = cells[0]; // Assuming date information is in the 1st column
+                    const leaveDate = new Date(dateCell.textContent);
+                    leaveDates.push(leaveDate);
+                }
+            }
+
+            // Open a calendar with leave dates marked
+            openCalendar(leaveDates);
+        }
+
+        function openCalendar(leaveDates) {
+            // Code to open a calendar with leave dates marked
+            // You can use libraries like FullCalendar, Datepicker, or build your own calendar UI.
+            // For demonstration purposes, I'll provide a simple example using alert.
+            let markedDatesText = "";
+            leaveDates.forEach(date => {
+                markedDatesText += "\n" + date.toDateString();
+            });
+
+            alert("Leave Dates:\n" + markedDatesText);
+        }
+        // Function to get the name of the previous month
+        // Function to get the name of the previous month
+        function getPreviousMonthName() {
+            const now = new Date();
+            now.setMonth(now.getMonth() - 1);
+            const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+            return monthNames[now.getMonth()];
+        }
+
+        // Function to fetch the timesheet status of the previous month
+        function getPreviousMonthStatus() {
+            // Implement logic to fetch the previous month's timesheet status
+            // You can make an AJAX request to your server to fetch this information
+            // For demonstration, let's assume the status is fetched from a variable
+            const previousMonthStatus = "Pending"; // Example status
+            return previousMonthStatus;
+        }
+
+        // Function to update the previous month timesheet status
+        function updatePreviousMonthStatus() {
+            const previousMonthName = getPreviousMonthName();
+            const previousMonthStatus = getPreviousMonthStatus();
+            const previousMonthStatusElement = document.getElementById("previous-month-status");
+            if (previousMonthStatusElement) {
+                previousMonthStatusElement.textContent = previousMonthName + " Timesheet Status: " + previousMonthStatus;
+            } else {
+                console.error('Previous month status element not found.');
+            }
+        }
+
+        // Call the function to update the previous month timesheet status when the page loads
+        document.addEventListener("DOMContentLoaded", function() {
+            updatePreviousMonthStatus();
+        });
+
+
+
+
+    </script>
+</body>
+</html>

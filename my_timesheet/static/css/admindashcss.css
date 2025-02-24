@@ -1,0 +1,254 @@
+/* General styling */
+body {
+    font-family: 'Manrope', sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header styling */
+header {
+    background-color: #7DBB42; /* Leaf Green header */
+    color: white;
+    text-align: center;
+    padding: 20px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 30px;
+}
+
+.logo img {
+    height: 80px; /* Adjust according to logo size */
+}
+
+/* Toolbar Styling */
+.toolbar {
+    text-align: right; /* Align to the right for discreet placement */
+    padding: 10px;
+    background-color: #f1f1f1; /* Light background */
+}
+
+/* Icon Button Styling */
+.icon-button {
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    font-size: 18px; /* Slightly larger icon */
+}
+
+.icon-button:hover {
+    color: #7DBB42; /* Highlight on hover */
+}
+
+/* Filter and search styling */
+.filter-search {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 30px;
+}
+
+.filters {
+    display: flex;
+    align-items: center;
+}
+
+.filters label,
+.filters select,
+.filters input {
+    margin-right: 15px;
+}
+
+.search-bar {
+    display: flex;
+    align-items: center;
+}
+
+.search-bar input {
+    width: 200px;
+    padding: 7px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.search-bar button {
+    background-color: white;
+    border: 1px solid #ddd;
+    padding: 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.search-bar button:hover {
+    background-color: #f0f0f0; /* Smooth hover transition */
+}
+
+/* Tile view styling (4 tiles per row) */
+.tile-view {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 tiles per row */
+    gap: 20px;
+    padding: 20px 30px;
+}
+
+.employee-tile {
+    border: 1px solid #ddd;
+    padding: 15px; /* Adequate padding */
+    border-radius: 10px; /* Soft corners */
+    background-color: #f9f9f9;
+    transition: all 0.3s ease; /* Smooth transitions */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.employee-tile:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Smooth hover transition */
+}
+
+.employee-tile button {
+    background-color: #7DBB42; /* Consistent color */
+    color: white;
+    padding: 7px 15px;
+    border-radius: 5px;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition */
+}
+
+.employee-tile button:hover {
+    background-color: #6CA836; /* Change on hover */
+}
+
+/* Expandable hover effects for tile view */
+.extra-info {
+    display: none; /* Initially hidden */
+    background-color: #f9f9f9;
+    padding: 15px; /* Increased padding for vertical expansion */
+    border: 1px solid #ddd;
+    border-radius: 10px; /* Soft corners */
+    transition: all 0.3s ease;
+    position: relative; /* Proper alignment */
+    z-index: 10; /* Ensure hover content is visible */
+}
+
+.employee-tile:hover .extra-info {
+    display: block; /* Show when hovering over tile */
+    transition: all 0.3s ease; /* Smooth transitions */
+}
+
+.extra-info p {
+    margin: 10px 0; /* Consistent spacing */
+}
+
+/* Grid view styling with proper columns and checkboxes */
+.employee-grid {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr 1fr 1fr 1fr 1fr; /* Add column for checkboxes */
+    gap: 20px;
+    padding: 20px 30px;
+}
+
+.grid-header {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr 1fr 1fr 1fr 1fr; /* Columns for each information */
+    font-weight: bold; /* Bold headers */
+    text-align: left;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+}
+.navbar {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+.navbar button {
+    background-color: white;
+    color: green;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* Grid view styling with proper columns and checkboxes */
+.employee-grid {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr 1fr 1fr 1fr 1fr; /* Add column for checkboxes */
+    gap: 20px;
+    padding: 20px 30px;
+}
+.select-all-container {
+    position: relative;
+    width: calc(16.66% - 20px); /* Adjust width to match tile */
+    margin: 10px; /* Adjust margin to match tile */
+}
+
+.select-all-button {
+    position: absolute;
+    top: -30px; /* Adjust top position to place it above the tile */
+    left: 10px; /* Adjust left position to align with the left side of the tile */
+    background-color: #ffffff;
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 18px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.grid-header {
+    display: grid;
+    grid-template-columns: auto 1fr 1fr 1fr 1fr 1fr 1fr; /* Columns for each information */
+    font-weight: bold; /* Bold headers */
+    text-align: left;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #ddd;
+}
+
+.grid-row {
+    display: grid; /* Grid for rows */
+    grid-template-columns: auto 1fr 1fr 1fr 1fr 1fr 1fr; /* Consistent with header */
+    padding: 10px 0; /* Adequate padding */
+    border-bottom: 1px solid #ddd; /* Separator between rows */
+}
+
+.grid-row input {
+    padding: 5px; /* Checkbox padding */
+}
+
+.select-row {
+    margin-right: 10px; /* Space for individual row selection */
+}
+/* CSS for list view */
+.employee-tile {
+    width: 100%; /* Take full width */
+    margin: 10px 0; /* Add vertical spacing */
+    box-shadow: none; /* Remove box shadow */
+}
+
+/* Style for list view */
+.list-item {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    /* Add any additional styling as needed */
+}
+#employee-table {
+    width: 100%;
+    border-collapse: collapse; /* Ensures borders between rows and columns connect seamlessly */
+}
+
+#employee-table th, #employee-table td {
+    border: 1px solid #ccc; /* Adds a light gray border around each cell */
+    padding: 8px; /* Adds padding inside cells */
+    text-align: left; /* Aligns text to the left */
+}
+
+#employee-table tr:nth-child(odd) {
+    background-color: #f9f9f9; /* Adds a striped effect for rows */
+}

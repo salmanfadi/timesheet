@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kanban Board</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/kanban.css">
+</head>
+<body>
+    <header>
+        <a href="{{ url_for('user_dashboard') }}">
+            <img src="../static/images/logo.png" alt="Logo">
+        </a>
+        <h1>Progress</h1>
+        <div id="info">
+            <div id="date"></div>
+            <div id="day"></div>
+            <div id="weather">Weather: Loading...</div>
+        </div>
+    </header>
+    <div id="sidebar">
+        <a href="{{ url_for('my_profile') }}" id="profile-btn"><i class="fas fa-user"></i> My Profile</a>
+        <a href="{{ url_for('my_timesheet') }}" id="timesheet-btn"><i class="fas fa-clock"></i> My Timesheet</a>
+        <a href="https://outlook.office365.com/mail/" class="sidebar-link">
+          <i class="fa fa-envelope"></i> Outlook Web
+        </a>
+        <a href="https://teams.microsoft.com/v2/" class="sidebar-link">
+          <i class="fa fa-users"></i> Teams Web
+        </a>
+        <a href="{{ url_for('kanban') }}" class="track-progress"><i class="fas fa-clipboard-check"></i> Track Your Progress</a>
+        <br><br><br><br>
+        <a href="{{ url_for('logout') }}t" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+    </div>    
+    <div id="main-content">
+        <div class="kanban-board" id="kanban-board">
+            <div class="kanban-column" data-status="todo">
+                <h2>To Do</h2>
+                <div class="kanban-tasks" id="todo-tasks"></div>
+                <button id="add-task-btn">Add Task</button>
+            </div>
+            <div class="kanban-column" data-status="inprogress">
+                <h2>In Progress</h2>
+                <div class="kanban-tasks" id="inprogress-tasks"></div>
+            </div>
+            <div class="kanban-column" data-status="done">
+                <h2>Done</h2>
+                <div class="kanban-tasks" id="done-tasks"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for adding tasks -->
+    <div id="task-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Add New Task</h2>
+            <form id="task-form">
+                <label for="task-name">Task Name:</label>
+                <input type="text" id="task-name" name="task-name" required>
+                <label for="task-project">Project:</label>
+                <input type="text" id="task-project" name="task-project" required>
+                <button type="submit">Add Task</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal for task details -->
+    <div id="details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="task-details"></div>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
+    <script src="../static/js/kanban.js"></script>
+</body>
+</html>

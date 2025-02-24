@@ -1,0 +1,92 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header Styling with Leafy Green Background */
+.header {
+    background-color: #228B22; /* Leafy green shade */
+    text-align: center;
+    padding: 15px; /* Adequate padding for header */
+}
+
+.logo-header {
+    height: 100px; /* Adjust as needed for logo size */
+}
+
+/* Login Container Styling */
+.login-container {
+    width: 300px;
+    margin: 20px auto; /* Adjusted to account for header */
+    text-align: center;
+    background-color: white;
+    padding: 20px;
+    border: 1px solid #ddd;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+}
+
+/* Styling for input fields */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px; /* Optional */
+}
+
+/* Container for password field and toggle button */
+.password-container {
+    position: relative; /* Allows absolute positioning of the button */
+}
+
+/* Positioning the eye icon within the password field */
+.toggle-password {
+    position: absolute; /* Allows precise placement */
+    right: 10px; /* Place it at the right side of the input field */
+    top: 50%; /* Center vertically */
+    transform: translateY(-50%); /* To ensure exact vertical alignment */
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0; /* Ensures it fits within the text field */
+    color: #555; /* Dark gray for better contrast */
+}
+
+/* Styling for submit button */
+button {
+    padding: 10px;
+    background-color: #0078d4; /* Default blue */
+    color: white;
+    border: none;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #005ea6; /* Darker blue on hover */
+}
+
+/* Microsoft button */
+.microsoft-button {
+    padding: 10px;
+    background-color: #0078d4;
+    /* Microsoft blue */
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: calc(100% - 20px);
+    /* Make it full width and adjust for padding */
+    border-radius: 5px;
+    /* Optional */
+    margin-top: 10px;
+    /* Add margin to the top */
+}
+
+/* Position the Microsoft button above other content */
+.signin-button-container {
+    position: relative;
+    /* Ensure relative positioning */
+    margin-top: 10px;
+    /* Add margin to the top */
+}

@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <link rel="stylesheet" href="../static/css/userdash.css">
+</head>
+<body>
+    <header>
+        <a href="../templates/userdash.html">
+            <img src="../static/images/logo.png" alt="Logo">
+        </a>
+        <h1>User Dashboard</h1>
+        <div id="info">
+            <div id="date"></div>
+            <div id="day"></div>
+            <div id="weather">Weather: Loading...</div>
+        </div>
+    </header>
+    <div id="sidebar">
+            <a href="{{ url_for('user.my_profile') }}" id="profile-btn"><i class="fas fa-user"></i> My Profile</a>        
+            <a href="{{ url_for('user.my_timesheet') }}" id="timesheet-btn"><i class="fas fa-clock"></i> My Timesheet</a>
+            <a href="https://outlook.office365.com/mail/" class="sidebar-link">
+              <i class="fa fa-envelope"></i> Outlook Web
+            </a>
+            <a href="https://teams.microsoft.com/v2/" class="sidebar-link">
+              <i class="fa fa-users"></i> Teams Web
+            </a>
+            <a href="{{ url_for('user.kanban') }}" class="track-progress"><i class="fas fa-clipboard-check"></i> Track Your Progress</a>
+            <br><br><br><br>
+            <a href="{{ url_for('auth.logout') }}" class="logout-btn"><i class="fa-solid fa-right-from-bracket"></i>Logout</a>
+
+    </div>    
+    <div id="main-content">
+        <div class="greeting" id="greeting"></div>
+    <script src="../static/js/userdash.js"></script>
+</body>
+</html>
